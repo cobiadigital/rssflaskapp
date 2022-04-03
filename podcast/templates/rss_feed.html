@@ -1,0 +1,17 @@
+{% import "main/macros/rss_item.jinja2" as item -%}
+
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+<title>Python By Night</title>
+<link>https://www.pythonbynight.com</link>
+<description>{{ meta_description }}</description>
+<language>en-us</language>
+<pubDate>{{ rss_channel_pub_date }}</pubDate>
+<docs>https://www.pythonbynight.com/rss</docs>
+<generator>https://www.pythonbynight.com</generator>
+{% for article in articles %}
+{{item.build_item(article.meta_title, article.slug, article.meta_description, article.rss_pub_date) -}}
+{% endfor %}
+</channel>
+</rss>

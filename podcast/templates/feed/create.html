@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}New Post{% endblock %}</h1>
+{% if g.user %}
+<a class="action" href="{{  url_for('feed.create') }}">New</a>
+{% endif %}
+{% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <div class="form-floating mb-3">
+        <input name="title" class="form-control" id="title" value="{{ request.form['title'] }}" placeholder="Title" required>
+        <label for="title">Title</label>
+    </div>
+    <div class="form-floating mb-3">
+        <textarea class="form-control" name="description" id="description" placeholder="Description">{{ request.form['description'] }}</textarea>
+        <label for="description">Description</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input name="guid" class="form-control" id="guid" value="{{ request.form['guid'] }}" placeholder="GUID" required>
+        <label for="guid">GUID</label>
+    </div>
+        <div class="mb-3">
+            <label for name="image_file">Image File</label>
+            <input type="file" name="image_file">
+        </div>
+        <div class="mb-3">
+            <label for="audio_file">Audio File</label>
+            <input type="file" name="audio_file">
+        </div>
+    <input type="submit" value="Save" class="btn btn-primary">
+</form>
+{% endblock %}
