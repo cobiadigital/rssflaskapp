@@ -13,8 +13,8 @@ CREATE TABLE post (
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     title TEXT NOT NULL,
     description TEXT,
-    imagefilename TEXT,
     audiofilename TEXT,
+    audio_size INTEGER,
     audio_file_length TEXT,
     guid TEXT UNIQUE NOT NULL
 )

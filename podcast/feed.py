@@ -35,14 +35,12 @@ def create():
         title = request.form['title']
         description = request.form['description']
         guid = request.form['guid']
-        image_file = request.files['image_file']
-        if image_file and allowed_file(image_file.filename):
-            imagefilename = secure_filename(image_file.filename)
-            image_file.save(os.path.join('/Users/Ben/pythonProject/rssapp/static/images/', imagefilename))
         audio_file = request.files['audio_file']
         if audio_file and allowed_file(audio_file.filename):
             audiofilename = secure_filename(audio_file.filename)
             audio_file.save(os.path.join('/Users/Ben/pythonProject/rssapp/static/audio/', audiofilename))
+            audio_size = os.stat(os.path.join('/Users/Ben/pythonProject/rssapp/static/audio/', audiofilename)).st_size
+
 
         audio = MP3(audio_file)
         audio_file_length = str(datetime.timedelta(seconds=round(audio.info.length)))
@@ -56,9 +54,9 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, description, guid, imagefilename, audiofilename, audio_file_length, author_id)'
+                'INSERT INTO post (title, description, guid, audiofilename, audio_size, audio_file_length, author_id)'
                 ' VALUES (?,?,?,?,?,?,?)',
-                (title, description, guid, imagefilename, audiofilename, audio_file_length, g.user['id'],)
+                (title, description, guid, audiofilename, audio_size, audio_file_length, g.user['id'],)
             )
             db.commit()
             return redirect(url_for('feed.index'))
@@ -106,6 +104,19 @@ def update(id):
             db.commit()
             return redirect(url_for('feed.index'))
     return render_template('feed/update.html', post=post)
+
+
+@bp.route('/rss')
+def rss():
+    """Generate rss feed."""
+    db = get_db()
+    posts = db.execute(
+        'SELECT p.id, created, title, description, author_id, username, audiofilename, audio_file_length, audio_size, guid'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' ORDER BY created DESC'
+    ).fetchall()
+
+    return render_template('feed/rss_feed.html', posts=posts)
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+    xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+    <channel>
+        <title>RSS Feed</title>
+        <link>https://www.benbrenner.com</link>
+        <itunes:owner>
+             <itunes:email>ben.brenner@gmail.com</itunes:email>
+        </itunes:owner>
+        <itunes:author>Ben Brenner</itunes:author>
+        <description>{{ meta_description }}</description>
+        <itunes:image href="{{ url_for('static', filename='images/auto-generated-content.jpg' ) }}" />
+        <language>en-us</language>
+        <link>"{{ url_for('index') }}"</link>
+        {% for post in posts %}
+            <item>
+              <title>{{ post['title'] }}</title>
+              <description>{{ post['description']}}</description>
+              <pubDate>{{ post['created']}}</pubDate>
+              <enclosure url="{{ url_for('static', filename='/' + post['audiofilename']) }}"
+                         type="audio/mpeg" length="{{ post['audio_size'] }}"/>
+              <itunes:duration>{{ post['audio_file_length'] }}</itunes:duration>
+              <guid>{{ post['guid'] }}</guid>
+            </item>
+        {% endfor %}
+  </channel>
+</rss>

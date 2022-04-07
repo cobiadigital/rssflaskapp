@@ -1,0 +1,9 @@
+{% macro build_item(title, guid, description, created) %}
+<item>
+<title>{{  post['title'] }}</title>
+<link>https://benbrenner.com/rss/{{ post['guid'] }}</link>
+<description>{{  post['description'] }}</description>
+<pubDate>{{ post['created'] }}</pubDate>
+<guid>https://benbrenner.com/rss/{{  post['guid'] }}</guid>
+</item>
+{% endmacro %}
